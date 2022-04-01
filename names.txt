@@ -1,0 +1,4 @@
+
+Type name speed range price
+CargoCraft,LAAT,100,100,100_000
+FighterCraft,ARC170,250,300,100_000
