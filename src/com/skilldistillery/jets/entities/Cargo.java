@@ -9,6 +9,10 @@ public class Cargo extends Craft implements CargoImpl {
 
 	public void loadCargo() {
 		
-		System.out.println(this.model + " begins loading troops for ground assault");
+		System.out.println();
+		System.out.println("------------------------------------------------");
+		System.out.println(this.model + " begins loading troops for ground assault!");
+		System.out.println("------------------------------------------------");
+		
 	}
 }

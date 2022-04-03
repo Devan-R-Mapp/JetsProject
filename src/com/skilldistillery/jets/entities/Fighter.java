@@ -1,6 +1,6 @@
 package com.skilldistillery.jets.entities;
 
-public class Fighter extends Craft {
+public class Fighter extends Craft implements CombatReady{
 
 	
 	
@@ -10,7 +10,14 @@ public class Fighter extends Craft {
 	
 	public void beginAttack() {
 		
-		System.out.println(this.model + " sets s-foils in attack postition");
+		System.out.println(this.model + " intercepts other incoming fighters.");
 	}
 
+	public void combatReady() {
+		System.out.println();
+		System.out.println("---------------------------------------------");
+		System.out.println(this.model + " sets it's s-foils in attack position");
+		System.out.println("---------------------------------------------");
+	}
+	
 }

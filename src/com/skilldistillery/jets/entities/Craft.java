@@ -18,12 +18,20 @@ public abstract class Craft { //this is the overarching Jets class
 		System.out.println(this.model + " * begins take of procedure *");
 		System.out.println(this.model + " \"Sir, all lights are green and we're ready to go!\"");
 		System.out.println(this.model + " * takes off *" );
+		System.out.println("|This " + this.model + " can fly " + (this.speed*this.range) + " miles before refueling|" );
 		System.out.println();
 	}
 	
 	public String getModel() {
 		return model;
 	}
+	public String toStringnameonly() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(model);
+		return builder.toString();
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

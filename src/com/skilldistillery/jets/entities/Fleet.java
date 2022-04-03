@@ -11,7 +11,6 @@ import java.util.Scanner;
 public class Fleet {
 	private ArrayList<Craft> hangar;
 	private int totalCraft = 0;
-	private Fleet Fleet;
 
 	public Fleet() {
 		hangar = new ArrayList<>();
@@ -38,6 +37,12 @@ public class Fleet {
 		hangar.add(index, runner);
 		totalCraft++;
 
+	}
+	public void add(Craft runner) {
+		
+		hangar.add(runner);
+		totalCraft++;
+		
 	}
 
 	public Fleet importlist(String txt) {
@@ -94,9 +99,7 @@ public class Fleet {
 					System.out.println(runner);
 					break;
 				case 2:
-					for (Craft craft : hangar) {
-						craft.fly();
-					}
+					runner.flyAll();
 					break;
 				case 3:
 					int topSpeed = 0;
@@ -104,14 +107,15 @@ public class Fleet {
 					Craft fstPlace = null;
 					for (Craft craft : hangar) {
 						craftSpeed = craft.getSpeed();
-						if(craftSpeed>topSpeed) {
+						if (craftSpeed > topSpeed) {
 							topSpeed = craftSpeed;
 							fstPlace = craft;
 						}
 					}
 					System.out.println();
 					System.out.println("----------------------------------------------------------------------");
-					System.out.println("Sir, the fastest ship we have is the " + fstPlace.getModel() + " with a top speed of " + fstPlace.getSpeed() + "kph");
+					System.out.println("Sir, the fastest ship we have is the " + fstPlace.getModel()
+							+ " with a top speed of " + fstPlace.getSpeed() + "kph");
 					System.out.println("----------------------------------------------------------------------");
 					System.out.println();
 					break;
@@ -121,25 +125,47 @@ public class Fleet {
 					Craft ndPlace = null;
 					for (Craft craft : hangar) {
 						craftRange = craft.getRange();
-						if(craftRange>topRange) {
+						if (craftRange > topRange) {
 							topRange = craftRange;
 							ndPlace = craft;
 						}
 					}
 					System.out.println();
-					System.out.println("----------------------------------------------------------------------------------------");
-					System.out.println("Sir, the ship that can travel the furthest is the " + ndPlace.getModel() + " with a top range of " + ndPlace.getSpeed() + " parsec");
-					System.out.println("----------------------------------------------------------------------------------------");
+					System.out.println(
+							"----------------------------------------------------------------------------------------");
+					System.out.println("Sir, the ship that can travel the furthest is the " + ndPlace.getModel()
+							+ " with a top range of " + ndPlace.getSpeed() + " parsec");
+					System.out.println(
+							"----------------------------------------------------------------------------------------");
 					System.out.println();
 					break;
 				case 5:
-					
+					for (Craft craft : hangar) {
+						if (craft instanceof Cargo) {
+							((Cargo) craft).loadCargo();
+						}
+					}
+					break;
+				case 6:
+					for (Craft craft : hangar) {
+						if (craft instanceof Fighter) {
+							((Fighter) craft).combatReady();
+						}
+					}
+					break;
+				case 7:
+					runner.addship(runner, sc);
+					break;
+				case 8:
+					runner.removeShip(runner, sc);
+					break;
 				case 9:
 					System.out.println("Commander off deck!");
 					isRunning = false;
 					break;
 
 				default:
+					sc.close();
 					break;
 
 				}
@@ -153,6 +179,67 @@ public class Fleet {
 
 	} // public void menu()
 
+	private Fleet removeShip(Fleet runner, Scanner sc) {
+		System.out.println();		
+		System.out.println("-----------------------------------------------------------------------------------------");
+		System.out.println("Commander, a ship will be removed from the fleet, Which ship would you like to remove?.");
+		System.out.println("-----------------------------------------------------------------------------------------");
+		runner.numberedList();
+		System.out.println("Which craft would delete?");
+		int choice = sc.nextInt();
+		choice--;
+		runner.remove(choice);
+		return runner;
+	}
+
+	private void remove(int choice) {
+		System.out.println();
+		System.out.println("---------------------------------");
+		System.out.println("The ship " + (hangar.get(choice)).toStringnameonly() + " has been removed.");
+		System.out.println("---------------------------------");
+		System.out.println();
+		hangar.remove(choice);
+		totalCraft--;
+		
+	}
+
+	public Fleet addship(Fleet runner, Scanner sc ) {
+		System.out.println();		
+		System.out.println("-----------------------------------------------------------------------------------------");
+		System.out.println("Commander, another ship will be added to the fleet, but we need some details on it first.");
+		System.out.println("-----------------------------------------------------------------------------------------");
+		System.out.println("What is the model of the ship?");
+		sc.nextLine();
+		String modelr = sc.nextLine();
+		System.out.println("What is the speed of the ship?");
+		int speedr = sc.nextInt();
+		System.out.println("What is the range of the ship?");
+		int ranger = sc.nextInt();
+		System.out.println("What is the price of the ship?");
+		double pricer = sc.nextDouble();
+		System.out.println("What kind of ship is this?");
+//		System.out.println("-Fighter or Cargo-");
+		String type = "";
+		boolean incorrectAnswer = true;
+		while (incorrectAnswer) {
+			type = sc.nextLine();
+			if (type.equalsIgnoreCase("fighter")) {
+					Fighter craftr = new Fighter(modelr, speedr, ranger, pricer);
+					runner.add(craftr);
+				incorrectAnswer = false;
+			} else if (type.equalsIgnoreCase("cargo")) {
+				Cargo craftr = new Cargo(modelr, speedr, ranger, pricer);
+				runner.add(craftr);
+				incorrectAnswer = false;
+			} else {
+				System.out.println("-Fighter or Cargo-");
+			}
+			
+		}
+		return runner;
+	}//public Fleet addship
+	
+	
 	public void menuPrint() {
 
 		System.out.println("1. List Fleet");
@@ -166,11 +253,22 @@ public class Fleet {
 		System.out.println("9. Quit");
 
 	}
-	
+
 	public void flyAll() {
-		
+		for (Craft craft : hangar) {
+			craft.fly();
+		}
 	}
 
+	public void numberedList() {
+		int totalCraft = 1;
+		for (Craft craft : hangar) {
+			System.out.println(totalCraft + ": " + craft.toStringnameonly());
+			totalCraft++;
+		}
+	}
+	
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
