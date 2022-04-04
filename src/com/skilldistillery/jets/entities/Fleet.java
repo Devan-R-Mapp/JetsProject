@@ -9,6 +9,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Fleet {
+	private String name;
 	private ArrayList<Craft> hangar;
 	private int totalCraft = 0;
 
@@ -38,11 +39,12 @@ public class Fleet {
 		totalCraft++;
 
 	}
+
 	public void add(Craft runner) {
-		
+
 		hangar.add(runner);
 		totalCraft++;
-		
+
 	}
 
 	public Fleet importlist(String txt) {
@@ -52,6 +54,14 @@ public class Fleet {
 		try {
 			reader = new BufferedReader(new FileReader(txt));
 			String line;
+//			while ((line = reader.readLine()) != "---") {
+//				setname(line);
+////			}
+//			if(txt.equalsIgnoreCase("RepublicShips")) {
+//				capitalShip.setname("Negotiator");
+//			} else if(txt.contains("Sepratists")){
+//				setName("Malevolence");
+//			}
 			while ((line = reader.readLine()) != null) {
 				String[] row = line.split(",");
 				int ships = 0;
@@ -76,9 +86,24 @@ public class Fleet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+
 		return capitalShip;
 
 	}// importlist
+
+	private String setname(String line) {
+		return this.name = line;
+		
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public void menu(Fleet input) {
 		boolean isRunning = true;
@@ -86,7 +111,7 @@ public class Fleet {
 		runner = input;
 		Scanner sc = new Scanner(System.in);
 		System.out.println("--------------------------------------------------");
-		System.out.println("Attention on deck! Commander what are your orders?");
+		System.out.println("Attention on deck! Welcome aboard! Commander what are your orders?");
 		System.out.println("--------------------------------------------------");
 		System.out.println();
 		while (isRunning) {
@@ -102,56 +127,16 @@ public class Fleet {
 					runner.flyAll();
 					break;
 				case 3:
-					int topSpeed = 0;
-					int craftSpeed = 0;
-					Craft fstPlace = null;
-					for (Craft craft : hangar) {
-						craftSpeed = craft.getSpeed();
-						if (craftSpeed > topSpeed) {
-							topSpeed = craftSpeed;
-							fstPlace = craft;
-						}
-					}
-					System.out.println();
-					System.out.println("----------------------------------------------------------------------");
-					System.out.println("Sir, the fastest ship we have is the " + fstPlace.getModel()
-							+ " with a top speed of " + fstPlace.getSpeed() + "kph");
-					System.out.println("----------------------------------------------------------------------");
-					System.out.println();
+					runner.fastestShipCall();
 					break;
 				case 4:
-					int topRange = 0;
-					int craftRange = 0;
-					Craft ndPlace = null;
-					for (Craft craft : hangar) {
-						craftRange = craft.getRange();
-						if (craftRange > topRange) {
-							topRange = craftRange;
-							ndPlace = craft;
-						}
-					}
-					System.out.println();
-					System.out.println(
-							"----------------------------------------------------------------------------------------");
-					System.out.println("Sir, the ship that can travel the furthest is the " + ndPlace.getModel()
-							+ " with a top range of " + ndPlace.getSpeed() + " parsec");
-					System.out.println(
-							"----------------------------------------------------------------------------------------");
-					System.out.println();
+					runner.longestRangeShipCall();
 					break;
 				case 5:
-					for (Craft craft : hangar) {
-						if (craft instanceof Cargo) {
-							((Cargo) craft).loadCargo();
-						}
-					}
+					runner.cargoloadscargo();
 					break;
 				case 6:
-					for (Craft craft : hangar) {
-						if (craft instanceof Fighter) {
-							((Fighter) craft).combatReady();
-						}
-					}
+					runner.preparesForCombat();
 					break;
 				case 7:
 					runner.addship(runner, sc);
@@ -160,7 +145,10 @@ public class Fleet {
 					runner.removeShip(runner, sc);
 					break;
 				case 9:
+					System.out.println();
+					System.out.println("-------------------");
 					System.out.println("Commander off deck!");
+					System.out.println("-------------------");
 					isRunning = false;
 					break;
 
@@ -179,8 +167,62 @@ public class Fleet {
 
 	} // public void menu()
 
+	private void preparesForCombat() {
+		for (Craft craft : hangar) {
+			if (craft instanceof Fighter) {
+				((Fighter) craft).combatReady();
+			}
+		}
+	}
+
+	private void cargoloadscargo() {
+		for (Craft craft : hangar) {
+			if (craft instanceof Cargo) {
+				((Cargo) craft).loadCargo();
+			}
+		}
+	}
+
+	private void longestRangeShipCall() {
+		int topRange = 0;
+		int craftRange = 0;
+		Craft ndPlace = null;
+		for (Craft craft : hangar) {
+			craftRange = craft.getRange();
+			if (craftRange > topRange) {
+				topRange = craftRange;
+				ndPlace = craft;
+			}
+		}
+		System.out.println();
+		System.out.println("----------------------------------------------------------------------------------------");
+		System.out.println("Sir, the ship that can travel the furthest is the " + ndPlace.getModel()
+				+ " with a top range of " + ndPlace.getRange() + " parsec");
+		System.out.println("----------------------------------------------------------------------------------------");
+		System.out.println();
+	}
+
+	private void fastestShipCall() {
+		int topSpeed = 0;
+		int craftSpeed = 0;
+		Craft fstPlace = null;
+		for (Craft craft : hangar) {
+			craftSpeed = craft.getSpeed();
+			if (craftSpeed > topSpeed) {
+				topSpeed = craftSpeed;
+				fstPlace = craft;
+			}
+		}
+		System.out.println();
+		System.out.println("----------------------------------------------------------------------");
+		System.out.println("Sir, the fastest ship we have is the " + fstPlace.getModel() + " with a top speed of "
+				+ fstPlace.getSpeed() + "kph");
+		System.out.println("----------------------------------------------------------------------");
+		System.out.println();
+	}
+
 	private Fleet removeShip(Fleet runner, Scanner sc) {
-		System.out.println();		
+		System.out.println();
 		System.out.println("-----------------------------------------------------------------------------------------");
 		System.out.println("Commander, a ship will be removed from the fleet, Which ship would you like to remove?.");
 		System.out.println("-----------------------------------------------------------------------------------------");
@@ -200,11 +242,11 @@ public class Fleet {
 		System.out.println();
 		hangar.remove(choice);
 		totalCraft--;
-		
+
 	}
 
-	public Fleet addship(Fleet runner, Scanner sc ) {
-		System.out.println();		
+	public Fleet addship(Fleet runner, Scanner sc) {
+		System.out.println();
 		System.out.println("-----------------------------------------------------------------------------------------");
 		System.out.println("Commander, another ship will be added to the fleet, but we need some details on it first.");
 		System.out.println("-----------------------------------------------------------------------------------------");
@@ -224,8 +266,8 @@ public class Fleet {
 		while (incorrectAnswer) {
 			type = sc.nextLine();
 			if (type.equalsIgnoreCase("fighter")) {
-					Fighter craftr = new Fighter(modelr, speedr, ranger, pricer);
-					runner.add(craftr);
+				Fighter craftr = new Fighter(modelr, speedr, ranger, pricer);
+				runner.add(craftr);
 				incorrectAnswer = false;
 			} else if (type.equalsIgnoreCase("cargo")) {
 				Cargo craftr = new Cargo(modelr, speedr, ranger, pricer);
@@ -234,12 +276,11 @@ public class Fleet {
 			} else {
 				System.out.println("-Fighter or Cargo-");
 			}
-			
+
 		}
 		return runner;
-	}//public Fleet addship
-	
-	
+	}// public Fleet addship
+
 	public void menuPrint() {
 
 		System.out.println("1. List Fleet");
@@ -267,8 +308,7 @@ public class Fleet {
 			totalCraft++;
 		}
 	}
-	
-	
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

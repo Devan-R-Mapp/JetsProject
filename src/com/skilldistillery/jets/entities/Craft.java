@@ -5,8 +5,16 @@ public abstract class Craft { //this is the overarching Jets class
 	private int speed;
 	private int range;
 	private double price;
+	private Pilot pilot;
 	
 	public Craft(String model, int speed, int range, double price) {
+		super();
+		this.model = model;
+		this.speed = speed;
+		this.range = range;
+		this.price = price;
+	}
+	public Craft(String model, int speed, int range, double price, Pilot pilot) {
 		super();
 		this.model = model;
 		this.speed = speed;

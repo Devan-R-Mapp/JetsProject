@@ -1,0 +1,5 @@
+CARGO,HMP droid gunship,587,20,60000
+FIGHTER,Droid tri-fighter,1050,5,40000
+FIGHTER,Vulture droid   ,1200,5,40000
+FIGHTER,P-38 starfighter,61000,20,100000
+CARGO,C-9979 landing craft,100,20,12000000

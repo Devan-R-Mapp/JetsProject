@@ -1,8 +1,8 @@
 package com.skilldistillery.jets.app;
 
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-import com.skilldistillery.jets.entities.Craft;
 //import java.io.BufferedReader;
 //import java.io.FileNotFoundException;
 //import java.io.FileReader;
@@ -25,10 +25,22 @@ public class ShipsApp {
 	} //main
 	
 	public void launch() {
-	ArrayList<Craft> tester = new ArrayList<Craft>();
-	Fleet Negotiator = new Fleet();
-	Negotiator = Negotiator.importlist("RepublicShips.txt");
-	Negotiator.menu(Negotiator);
+		Scanner sc = new Scanner(System.in);
+	Fleet runnerFleet = new Fleet();
+	boolean isNotCorrect = true;
+		while (isNotCorrect) {
+			try {
+				System.out.println("Please enter the fleet file you want to look at: ");
+				System.out.println("Current files: \"RepublicShips\" and \"SepratistShips\"");
+				String txtFile = sc.nextLine();
+				runnerFleet = runnerFleet.importlist(txtFile + ".txt");
+				isNotCorrect =false;
+			} catch (Exception e) {
+				System.out.println("Try again");
+			}
+		} 
+		runnerFleet.menu(runnerFleet);
+
 	
 	}// launch
 
